@@ -1,8 +1,8 @@
 //const MongoClient= require('mongodb').MongoClient;
 const {MongoClient, ObjectID}= require('mongodb');
 
-var Obj= new ObjectID();
-console.log(Obj);
+// var Obj= new ObjectID(); // mengambil id 
+// console.log(Obj);
 
 // var user= { name : 'dara', age:25};
 // var {name} = user;// untuk membuat variabel dari sebuah objek
