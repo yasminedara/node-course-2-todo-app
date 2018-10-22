@@ -95,14 +95,13 @@ app.get('/todos/:id',(req,res)=>{
     app.patch('/todos/:id' ,(req, res) => {
         var id= req.params.id;
         var body = _.pick(req.body, ['text','completed']); // mengambil inputan text dan completed
-        console.log(body);
+    
         
 
         if (!ObjectID.isValid(id)){
             return res.status(404).send();
         }
-         console.log(_.isBoolean(body.completed));
-         console.log(body.completed);
+         
          
         if (_.isBoolean(body.completed) && body.completed){ // jika true && true
             body.completedAt= new Date().getTime();
@@ -122,6 +121,20 @@ app.get('/todos/:id',(req,res)=>{
             res.status(400).send();
         })
 
+    });
+
+    app.post('/user', (req, res)=>{
+        var user= new User({
+            email: req.body.email,
+            password : req.body.password
+    
+        });
+    
+        user.save().then((docs)=>{
+           res.send(docs);
+        }, (e)=>{
+            res.status(400).send(e);
+        });
     });
     
 
