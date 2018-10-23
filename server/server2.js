@@ -37,7 +37,7 @@ app.post('/users', (req, res) => {
   });
 
  //private route
-app.get('/users/me', authenticate, (req,res)=>{
+app.get('/users/me', authenticate, (req,res)=>{ // authenticate merupakan middleware yang cara kerjanya dia akan menjalankan authenticate terlebih dahulu
   res.send(req.user)
 });
 
