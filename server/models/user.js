@@ -40,10 +40,8 @@ UserSchema.methods.toJSON = function () {
   return _.pick(userObject, ['_id', 'email']);
 };
 
-UserSchema.methods.generateAuthToken = function () {
+UserSchema.methods.generateAuthToken = function () { // dipakai di server1
   var user = this;
-  
-  
   var access = 'auth';
   var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
 
@@ -56,10 +54,9 @@ UserSchema.methods.generateAuthToken = function () {
 };
 
 
-UserSchema.statics.findByToken = function(token){
+UserSchema.statics.findByToken = function(token){ // di pakai di authenticate
   var User = this;
   var decoded;
-
   try{
     decoded= jwt.verify(token,'abc123');
   }catch(e){
@@ -69,8 +66,6 @@ UserSchema.statics.findByToken = function(token){
 
     return Promise.reject();
   }
-
-
     return User.findOne({
       '_id': decoded._id,
       'tokens.token' :token,
@@ -78,6 +73,27 @@ UserSchema.statics.findByToken = function(token){
         });
   
 };
+
+UserSchema.statics.finByCredentials= function(email, password){
+  var User= this;
+
+  return User.findOne({email}).then((user)=>{
+    if(!user){
+      return Promise.reject();
+    }
+
+  return new Promise((resolve, reject)=>{
+    
+    bcrypt.compare(password, user.password, (err, res)=>{
+      if(res){
+        resolve(user);
+      }else{
+        reject();
+      }
+  });
+  })
+  })
+}
 
 UserSchema.pre('save', function(next){
     var user = this;
